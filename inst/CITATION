@@ -1,0 +1,16 @@
+bibentry(bibtype = "Article",
+  title        = "Efficient Multiple Testing Adjustment for Hierarchical Inference",
+  author       = c(person(given = "Claude",
+                          family = "Renaux"),
+                   person(given = "Peter",
+                          family = "B\\\"uhlmann")),
+  journal      = "arXiv preprint arXiv:2104.15028",
+  year         = "2021",
+
+  header       = "To cite hierbase in publications use:",
+  textVersion  =
+  paste("Claude Renaux and Peter Bühlmann (2021).",
+        "Efficient Multiple Testing Adjustment for Hierarchical Inference.",
+        "arXiv preprint arXiv:2104.15028.")
+)
+

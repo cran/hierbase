@@ -1,0 +1,275 @@
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{vignette-hierbase.Rnw}
+%\VignetteEncoding{UTF-8}
+
+\documentclass[11pt]{article}
+\usepackage{fullpage}
+\usepackage{graphicx}
+\usepackage{latexsym,amsmath,amssymb,amsthm,epic,eepic,multirow}
+\usepackage{natbib}
+
+%\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{subfigure}
+% \usepackage{amsfonts}
+%\usepackage{jmlr2e}
+\usepackage{natbib}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{mdframed}
+% \usepackage{sfsbib}
+\usepackage{tikz}
+\usepackage{hyperref}
+
+\newcommand{\PP}{\mathbb{P}}
+\newcommand{\EE}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\parcor}{\mbox{Parcor}}
+\newcommand{\Cov}{\mbox{Cov}}
+\newcommand{\Cor}{\mbox{Cor}}
+\newcommand{\Var}{\mbox{Var}}
+\newcommand{\peff}{\mathrm{peff}}
+\newcommand{\by}{\mathbf{Y}}
+\newcommand{\bx}{\mathbf{X}}
+\newcommand{\argmin}{\mathrm{argmin}}
+\newcommand{\pa}{\mathrm{pa}}
+
+%\theoremstyle{plain}
+\newtheorem{theo}{Theorem}
+\newtheorem{prop}{Proposition}
+\newtheorem{lemm}{Lemma}
+\newtheorem{corr}{Corollary}
+
+%\theoremstyle{definition}
+\newtheorem{defi}{Definition}
+\newtheorem{examp}{Example}
+
+\begin{document}
+
+\title{Introduction to the \textsf{R} package \texttt{hierbase}: Enabling Hierarchical Multiple Testing}
+
+\author{Claude Renaux and Peter B\"uhlmann\\Seminar for Statistics, 
+ETH Z\"urich}
+%\date{}
+
+\maketitle
+
+\noindent \textbf{This vignette is in parts based on the pre-print \cite{renaux21}.}
+
+\section{Cite \texttt{hierbase}}
+If you use the \texttt{hierbase} package, please cite the paper Renaux, C., and B\"uhlmann, P. (2021). Efficient Multiple Testing Adjustment for Hierarchical Inference.
+\textit{arXiv preprint arXiv:2104.15028}.
+
+\section{Introduction}
+A major goal in high-dimensional statistics is to assign statistical
+significance of single covariates for a response of interest. 
+Especially the inference part in terms of statistical significance testing (or
+confidence intervals) is, however, often overly ambitious and requires stringent
+assumptions on the well-posedness 
+  of the design matrix of the covariates in high dimensions.  
+Instead, we advocate 
+to use hierarchical inference, as proposed earlier with
+the same motivation by \cite{Meins08} and further refined by subsequent
+work. It is a data-driven multiple testing approach to find significant groups
+or possibly singletons of covariates. The advantage is that groups of
+covariates are typically much easier to identify and if the signal is
+sufficiently strong relative to the correlation structure, our method is
+still able to detect significant single covariates. 
+The procedure goes top-down 
+through a hierarchical tree from larger to smaller groups and tries to find 
+an as fine resolution of 
+significant groups as possible. 
+
+Since many tests are done in a sequential structure given by the
+hierarchical tree, a multiple testing adjustment has to be applied. 
+\cite{Meins08} first proposed a hierarchical multiple testing
+adjustment, which we call depth-wise Bonferroni: it (essentially) performs
+Bonferroni adjustment with respect to multiplicity of the number of tests
+at each depth of the hierarchical tree. Depth-wise Bonferroni has been
+improved by so-called inheritance multiple testing rules
+\citep{goeman2010,goeman2012}. Our new proposal is also based on an
+inheritance rule but exploits inheritance more sparsely along the branches of the
+hierarchical tree than the methods by \cite{goeman2010,goeman2012}: we call
+our method Sparse-Branches Hierarchical (SBH) inheritance rule.
+
+For further details, we refer to our paper \cite{renaux21}, where we
+prove that strong control of the familywise error rate holds for our new SBH
+inheritance rule and that it is an improvement over the depth-wise
+Bonferroni method. We also reason that our SBH inheritance rule
+has higher power for many relevant and practical examples than some other
+inheritance methods, which all improve upon the depth-wise Bonferroni
+approach as well, namely the ones from \cite{goeman2010} and
+\cite{goeman2012}, and the related procedure, tailored for multi
+  sample-splitting tests, from \cite{manpb16b}. 
+
+
+\section{Hierarchical Cluster Tree}
+The tree has to partition the covariates in non-overlapping groups for each 
+height of the tree. The partitions are coarser in the top part and get 
+finer toward the bottom of the tree. The top node in the tree is always the
+entire group of all covariates and corresponds to the global null-hypothesis.
+Our \textsf{R} package includes two functions for building a hierarchical tree. 
+\texttt{cluster\texttt{\char`_}vars} or \texttt{cluster\texttt{\char`_}positions}. 
+
+A hierarchical tree can be built using hierarchical clustering of the %, say, 
+$p$ covariates using $1 - (\text{Person's correlation})^2$ as a 
+dissimilarity measure and average linkage. This is performed by default using
+the function \texttt{cluster\texttt{\char`_}vars} but many other options are offered. 
+
+If there exists a meaningful ordering of the covariates such that closer 
+covariates are more similar, then the function \texttt{cluster\texttt{\char`_}positions} 
+could be used. It builds a hierarchical tree using recursive binary 
+partitioning of consecutive covariates. 
+
+The user is free in define a different hierarchical tree as long as it can be 
+stored as a dendrogram in \textsf{R}. See the structure of the output of 
+either \texttt{cluster\texttt{\char`_}var} or \texttt{cluster\texttt{\char`_}position} in order
+to use the same structure when calling the hierarchical procedure. 
+
+
+\section{Toy example for the function \texttt{advance\texttt{\char`_}hierarchy}}
+Our \textsf{R} package \texttt{hierbase} implements our SBH inheritance rule as well 
+as depth-wise Bonferroni. We demonstrate the function 
+\texttt{advance\texttt{\char`_}hierarchy} in a toy example. 
+The following arguments of the function are specified: 
+\texttt{x} the data matrix, \texttt{y} 
+the response, \texttt{dendr} a dendrogram of the hierarchical tree (e.g.\ the 
+output of the function \texttt{cluster\texttt{\char`_}vars}), and \texttt{test} 
+a character string representing which of the ready-to-use test functions should 
+be used. 
+
+<<eval=TRUE>>=
+# load the packages
+library(hierbase)
+library(MASS) # for generating x
+
+# random number generator (for parallel computing)
+RNGkind("L'Ecuyer-CMRG")
+
+# generate a toy data set
+n <- 100
+p <- 50 # 200
+set.seed(3)                           # set a seed
+x <- mvrnorm(n, mu = rep(0, p), Sigma = diag(p))  # data matrix x
+colnames(x) <- paste0("Var", 1:p)     # column names
+beta <- rep(0, p)                     # coefficients
+beta[c(5, 20, 46)] <- 1               # three active covariates
+y <- x %*% beta + rnorm(n)            # response
+
+# estimate hierarchical tree
+dendr1 <- cluster_vars(x = x)
+
+# run hierarchical procedure
+set.seed(4)
+res <- advance_hierarchy(x, y, dendr = dendr1, test = "QF") 
+res
+@
+
+If no second level of the hierarchical tree is specified by the user 
+(see argument \texttt{block} of the function \texttt{cluster\texttt{\char`_}vars}), 
+then \texttt{NA}s are displayed in the column \texttt{block} of the above output. 
+See Section \ref{sec.par} for an example how one can define the second level 
+of the hierarchical tree and run the code in parallel. 
+
+Note that the printed lines starting with ``step is ...'' are printed by the 
+test function \texttt{QF} used in this example from the \textsf{R} package \texttt{SIHR}. 
+
+
+\section{Toy example for the function \texttt{run\texttt{\char`_}hierarchy}}
+
+Alternatively, one can use the function \texttt{run\texttt{\char`_}hierarchy} 
+instead of \texttt{advance\texttt{\char`_}hierarchy}. The clustering step 
+remains the same. 
+The function \texttt{run\texttt{\char`_}hierarchy} is very generic and 
+can be called with the user's favorite test function. The test function is 
+passed on as an argument of the function \texttt{run\texttt{\char`_}hierarchy}. 
+
+<<eval=FALSE>>=
+# # estimate hierarchical tree
+# dendr1 <- cluster_vars(x = x)
+
+# define test function
+# low-dimensional partial F-Test
+test.func.F <- function(x, y, clvar, colnames.cluster,
+                        arg.all, arg.all.fix, mod.large,
+                        mod.small) {
+  ## larger model
+  data.large <- cbind(clvar, x)
+  # estimate larger model
+  mod.large <- lm(y ~ data.large)
+  
+  ## smaller model
+  setdiff.cluster <- setdiff(colnames(x), colnames.cluster)
+  data.small <- cbind(clvar, x[, setdiff.cluster]) 
+  # special case if data.small is empty
+  if (ncol(data.small) == 0) {data.small <- rep(1, length(y))}
+  
+  # calculate smaller model
+  mod.small <- lm(y ~ data.small)
+  
+  ## compare the models 
+  # partial F test
+  pval <- anova(mod.small, mod.large, test = "F")$P[2]
+  
+  return(list("pval" = pval, "mod.small" = NULL))
+}
+
+# run hierarchical procedure
+set.seed(4)
+res2 <- run_hierarchy(x, y, dendr = dendr1, test.func = test.func.F) 
+res2
+@
+
+
+\section{Parallel}\label{sec.par}
+
+All the functions can easily be run in parallel if the second level of 
+the hierarchical tree is specified by the user. Typically, one would specify a partition % multiple groups, say, 
+consisting of, say, five groups which represent the second level of the tree. 
+This is specified as an argument in the function call of 
+\texttt{cluster\texttt{\char`_}vars} or \texttt{cluster\texttt{\char`_}positions} 
+if desired. The name of those groups would appear in the column block of 
+the output of the hierarchical procedure.
+
+
+<<eval=FALSE>>=
+## With block
+# The user defines the second level of the hierarchical tree.
+block <- data.frame("var.name" = paste0("Var", 1:p),
+                   "block" = rep(c(1, 2), each = p/2))
+
+# Estimate the hierarchical cluster tree in parallel.
+# The argument block defines the second level of the tree.
+dendr2 <- cluster_vars(x = x, block = block, 
+                      # the following arguments have to be specified
+                      # for parallel computation
+                      parallel = "multicore",
+                      ncpus = 2)
+
+# Run the hierarchical procedure in parallel.
+set.seed(76)
+res2 <- advance_hierarchy(x = x, y = y, dendr = dendr2,
+                          test = "QF",
+                          # the following arguments have to be specified
+                          # for parallel computation
+                          parallel = "multicore",
+                          ncpus = 2)
+@
+
+See the help files of the functions \texttt{run\texttt{\char`_}hierarchy} or \texttt{advance\texttt{\char`_}hierarchy} for more details about how one can
+run the code in parallel. 
+
+Note that it is possible to analyze multiple data sets simultaneously by specifying
+the different responses and data matrices each as elements of two lists; see the help
+files for more details. This makes sense if data sets from, say, multiple studies with the same
+response and similar or same data matrices are analyzed.
+
+
+
+\bibliographystyle{apalike}
+\bibliography{references}
+
+\end{document}
+
