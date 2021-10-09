@@ -239,7 +239,9 @@ advance_hierarchy <- function(x, y, dendr,
     test.func.tmp <- test.func.QF
     arg.all.tmp <- list(NULL)
     arg.all.fix.tmp <- list(Cov.weight = TRUE, # default
-                            A = diag(1, p), intercept = TRUE, 
+                            A = NULL, 
+                            # previous version of SIHR: diag(1, p), 
+                            # previous version of SIHR: intercept = TRUE, 
                             tau.vec = 1, 
                             lambda = NULL, # use glmnet CV with lambda.min
                             # lambda = "CV", # use glmnet CV with lambda.1se

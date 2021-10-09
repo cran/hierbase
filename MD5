@@ -1,7 +1,7 @@
-ec49317d790a45e4a48dc27cc9fe1d6a *DESCRIPTION
+9ecf06135525e4ae4af13f3a3f907ca4 *DESCRIPTION
 92182461def3ee13e8dd5f2c4945782e *NAMESPACE
 a7eca9813d320d14366cdf420a6d2b6b *NEWS.md
-d6e399cd3b4ea89c8279b5594f7c2b35 *R/advance_hierarchy.R
+569a0802cb52c5d7e519a3ea031af9e9 *R/advance_hierarchy.R
 7af2f7bbee3662da4903b40fb4548a3a *R/check-input.R
 7149cc881ce3e68eaee94edbaeae8005 *R/cluster-position.R
 3691cc98894e99f85493bab7685d49ed *R/cluster-var.R
@@ -11,14 +11,14 @@ cfd393c8d3e2bfeba60315e794fbb000 *R/comp-LMobj-large.R
 6d03adb536b1d2abe4d13d9cea22c4d3 *R/iterative-testing.R
 5d0ff1e210994356d0145fa8c2b6e719 *R/print.R
 28b99698febc500e47e37c1921da23fe *R/run-hierarchy.R
-b5bd1bedd7c9ea72a48add9a1cf1870e *R/test-functions.R
+b903f1f163efead91bcb86be9ae03b11 *R/test-functions.R
 181c70163a71e9de376f992b397689fc *R/tryCatch-W-E.R
 3f0fd977b278ece5f5beb188795d6757 *README.md
 25213a53a4ec2787a65dbe3aea3328f6 *build/vignette.rds
 518576d1927620c180837fc0510208c0 *inst/CITATION
 7610bf055c2e533d212c0870f83cf369 *inst/doc/vignette-hierbase.R
 d50ef3b20c7fe557a2e229a34908088d *inst/doc/vignette-hierbase.Rnw
-66b50372a56b6855bb9ed327004478f1 *inst/doc/vignette-hierbase.pdf
+69b55444bae38856318823ef56e7ea09 *inst/doc/vignette-hierbase.pdf
 058b2a7846bcbeb4b0f0557631a05353 *man/advance_hierarchy.Rd
 1a0f7e0a5af64eb101161dc105276ef3 *man/cluster_positions.Rd
 873d0472cc71e985e12a82881d7ded96 *man/cluster_vars.Rd

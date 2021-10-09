@@ -136,7 +136,9 @@ test.func.hdi <- function(x, y, clvar, arg.all, colnames.cluster,
 # Compute output of lasso for each data set
 compMOD.same.QF <- function(x, y, clvar, arg.all, arg.all.fix) {
 
-  intercept <- arg.all.fix$intercept
+  # In the previous version of SIHR::QF, there was an argument to set the intercept 
+  # to TRUE and FALSE. We always want an initial Lasso fit with an intercept.
+  intercept <- TRUE 
   lambda <- arg.all.fix$lambda
   
   # if (!is.null(clvar)) {
@@ -166,7 +168,14 @@ compMOD.same.QF <- function(x, y, clvar, arg.all, arg.all.fix) {
   }
   htheta <- htheta * col.norm
 
-  initial.lasso.fit <- list("lasso.est" = htheta)
+  # We have to remove the intercept because only an initial estimate of 
+  # the coefficient of X_1, ..., X_p is required and asked for as an 
+  # input of the argument init.coef of the function SIHR::QF. 
+  # We still want to estimate the initial Lasso fit with an intercept
+  # because the initial Lasso fit could be biased if we estimate it 
+  # without an intercept but there is a "true underlying" intercept 
+  # required. 
+  initial.lasso.fit <- list("lasso.est" = htheta[-1]) # remove intercept => [-1]
   
   return(initial.lasso.fit)
 } # {compMOD.same.QF}
@@ -182,7 +191,7 @@ test.func.QF <- function(x, y, clvar, arg.all, colnames.cluster,
   
   Cov.weight <- arg.all.fix$Cov.weight
   A <- arg.all.fix$A
-  intercept <- arg.all.fix$intercept
+  # previous version of SIHR: intercept <- arg.all.fix$intercept
   tau.vec <- arg.all.fix$tau.vec
   lambda <- arg.all.fix$lambda
   mu <- arg.all.fix$mu
@@ -199,12 +208,15 @@ test.func.QF <- function(x, y, clvar, arg.all, colnames.cluster,
   # Note that the intercept is not included in the test set.
   # For covariates X1, X2, ... Xp, the corresponding index would be 1,2, ... p
   ind.test.set <- which(colnames(x) %in% colnames.cluster)
+  
+  browser()
+  
   Est <- SIHR::QF(X = cbind(x, clvar), y = y,
                   G = ind.test.set,
                   Cov.weight = Cov.weight,
-                  A = A, intercept = intercept,
-                  tau.vec = tau.vec,
-                  init.Lasso = mod.large$lasso.est,
+                  A = A, 
+                  tau.vec = tau.vec, 
+                  init.coef = mod.large$lasso.est, 
                   lambda = lambda, mu = mu,
                   step = step, resol = resol,
                   maxiter = maxiter)

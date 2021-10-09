@@ -1,14 +1,14 @@
 Package: hierbase
 Type: Package
 Title: Enabling Hierarchical Multiple Testing
-Version: 0.0.4
+Version: 0.1.0
 Authors@R: c(person("Claude", "Renaux", role = c("aut", "cre"), 
                     email = "renaux@stat.math.ethz.ch"), 
              person("Peter", "Bühlmann", role = c("ths")))
 Description: Implementation of hierarchical inference based on Renaux and 
     Bühlmann (2021) 'Efficient Multiple Testing Adjustment for Hierarchical 
     Inference' <arXiv:2104.15028>.  
-    The R-package hierbase offers tools to perform hierarchical inference 
+    The R-package 'hierbase' offers tools to perform hierarchical inference 
     for one or multiple data sets based on ready-to-use (group) test functions
     or alternatively a user specified (group) test function. The procedure 
     is based on an efficient hierarchical multiple testing correction and 
@@ -27,9 +27,9 @@ Suggests: knitr, MASS, testthat
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2021-09-30 20:54:49 UTC; renauxc
+Packaged: 2021-10-08 19:51:14 UTC; renauxc
 Author: Claude Renaux [aut, cre],
   Peter Bühlmann [ths]
 Maintainer: Claude Renaux <renaux@stat.math.ethz.ch>
 Repository: CRAN
-Date/Publication: 2021-10-03 08:30:02 UTC
+Date/Publication: 2021-10-09 15:00:20 UTC
