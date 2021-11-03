@@ -296,103 +296,105 @@ test_that("iterative_testing: check multiple testing adjustment and aggregation"
                        function(x) all(x[[1]] %in% x[[2]]) & all(x[[2]] %in% x[[1]]))
   expect_true(all(check.names))
 
-  ## dummy test function and three data set
-  ## run hierarchy with block
-  set.seed(3)
-  x1 <- matrix(rnorm(5000), ncol = 50)
-  x2 <- matrix(rnorm(5000), ncol = 50)
-  x3 <- matrix(rnorm(5000), ncol = 50)
-  colnames(x1) <- colnames(x2) <- colnames(x3) <- paste0("Var", 1:50)
-  y1 <- x1 %*% c(2, 1.8, 0, 0, 0, 0.25, 0, 0, 0, 0,
-                 1.2, rep(0, 38), 0.1) + rnorm(100)
-  y2 <- x2 %*% c(0.1, 0.1, 0, 0, 0, 0.25, 0, 0, 0, 0,
-                 0.87, rep(0, 38), 0.2) + rnorm(100)
-  y3 <- x3 %*% c(-0.05, -0.7, 0, 0, 0, 0.25, 0, 0, 0, 0,
-                 0.14, rep(0, 38), 0.05) + rnorm(100)
-  clvar <- NULL
-
-  # dummy function which returns NULL
-  compMOD_changing <- function(...) NULL
-  
-  pval <- 1e-3
-
-  # Block
-  block <- data.frame("var.names" = paste0("Var", 1:50),
-                      "blocks" = c(rep(1, 10), rep(2, 32), rep(3, 8)),
-                      stringsAsFactors = FALSE)
-
-  dendr <- cluster_vars(x = list(x1, x2, x3), block = block)
-
-  cluster_test <- list(c(paste0("Var", 1:10), paste0("Var", 11: 42), paste0("Var", 43:50)),
-                       paste0("Var", 1:10),
-                       paste0("Var", 11: 42),
-                       paste0("Var", 43:50),
-                       # block 1
-                       c("Var8", "Var3", "Var9"),
-                       c("Var1", "Var6", "Var5", "Var10", "Var2","Var4", "Var7"),
-                       # block 2
-                       # not used
-                       # block 3
-                       c("Var46", "Var44", "Var49"),
-                       c("Var43", "Var47", "Var45", "Var48", "Var50"))
-
-  # first / top cluster of every block
-  res <- run_hierarchy(x = list(x1, x2, x3), y = list(y1, y2, y3), clvar = clvar,
-                       dendr = dendr, test.func = test.func.1, # dummy test funct.
-                       compMOD.same = compMOD_changing, # it only returns NULL
-                       compMOD.changing = compMOD_changing,
-                       arg.all.fix = list(pval = pval,
-                                          sig = cluster_test[c(1:4)]),
-                       hier.adj = FALSE,
-                       mt.adj = "SBH")
-
-  fc.tippett <- function(x) 1 - (1 - min(x))^(3)
-  
-  expect_identical(res$p.value, c(fc.tippett(pval / (32 / 50)),
-                                  fc.tippett(pval / (10 / 50)),
-                                  fc.tippett(pval / (8 / 50))))
-  expect_identical(res$block, as.character(c(2, 1, 3)))
-
-  # first / top cluster of frist block only
-  res <- run_hierarchy(x = list(x1, x2, x3), y = list(y1, y2, y3), clvar = clvar,
-                       dendr = dendr, test.func = test.func.1, # dummy test funct.
-                       compMOD.same = compMOD_changing, # it only returns NULL
-                       compMOD.changing = compMOD_changing,
-                       arg.all.fix = list(pval = pval,
-                                          sig = cluster_test[c(1:2)]),
-                       hier.adj = FALSE,
-                       mt.adj = "SBH")
-
-  expect_identical(res$p.value, c(fc.tippett(pval/ (10 / 50)), NA, NA))
-  expect_identical(res$block, as.character(c(1, 2, 3)))
-
-  # one cluster on the second level of the first block only (3rd level in entire tree)
-  res <- run_hierarchy(x = list(x1, x2, x3), y = list(y1, y2, y3), clvar = clvar,
-                       dendr = dendr, test.func = test.func.1, # dummy test funct.
-                       compMOD.same = compMOD_changing, # it only returns NULL
-                       compMOD.changing = compMOD_changing,
-                       arg.all.fix = list(pval = pval,
-                                          sig = cluster_test[c(1:2, 6)]),
-                       hier.adj = FALSE,
-                       mt.adj = "SBH")
-
-  expect_identical(res$p.value, c(fc.tippett(pval/ (7 / 10)), NA, NA))
-  expect_identical(res$block, as.character(c(1, 2, 3)))
-
-  # two cluster on the second level of the first and thrid block only (3rd level in entire tree)
-  res <- run_hierarchy(x = list(x1, x2, x3), y = list(y1, y2, y3), clvar = clvar,
-                       dendr = dendr, test.func = test.func.1, # dummy test funct.
-                       compMOD.same = compMOD_changing, # it only returns NULL
-                       compMOD.changing = compMOD_changing,
-                       arg.all.fix = list(pval = pval,
-                                          sig = cluster_test[c(1:2, 4, 6, 8)]),
-                       hier.adj = FALSE,
-                       mt.adj = "SBH")
-
-  # devided by ... / 18 because the second block could not be shown to be significant and
-  # therefore its part is inherited
-  expect_identical(res$p.value, c(fc.tippett(pval/ (10 / 18 * 7 / 10)), fc.tippett(pval/ (8 / 18 * 5 / 8)), NA))
-  expect_identical(res$block, as.character(c(1, 3, 2)))
+  # ## Commented on November 3rd
+  # ## dummy test function and three data set
+  # ## run hierarchy with block
+  # set.seed(3)
+  # x1 <- matrix(rnorm(5000), ncol = 50)
+  # x2 <- matrix(rnorm(5000), ncol = 50)
+  # x3 <- matrix(rnorm(5000), ncol = 50)
+  # colnames(x1) <- colnames(x2) <- colnames(x3) <- paste0("Var", 1:50)
+  # y1 <- x1 %*% c(2, 1.8, 0, 0, 0, 0.25, 0, 0, 0, 0,
+  #                1.2, rep(0, 38), 0.1) + rnorm(100)
+  # y2 <- x2 %*% c(0.1, 0.1, 0, 0, 0, 0.25, 0, 0, 0, 0,
+  #                0.87, rep(0, 38), 0.2) + rnorm(100)
+  # y3 <- x3 %*% c(-0.05, -0.7, 0, 0, 0, 0.25, 0, 0, 0, 0,
+  #                0.14, rep(0, 38), 0.05) + rnorm(100)
+  # clvar <- NULL
+  # 
+  # # dummy function which returns NULL
+  # compMOD_changing <- function(...) NULL
+  # 
+  # pval <- 1e-3
+  # 
+  # # Block
+  # block <- data.frame("var.names" = paste0("Var", 1:50),
+  #                     "blocks" = c(rep(1, 10), rep(2, 32), rep(3, 8)),
+  #                     stringsAsFactors = FALSE)
+  # 
+  # dendr <- cluster_vars(x = list(x1, x2, x3), block = block)
+  # 
+  # cluster_test <- list(c(paste0("Var", 1:10), paste0("Var", 11: 42), paste0("Var", 43:50)),
+  #                      paste0("Var", 1:10),
+  #                      paste0("Var", 11: 42),
+  #                      paste0("Var", 43:50),
+  #                      # block 1
+  #                      c("Var8", "Var3", "Var9"),
+  #                      c("Var1", "Var6", "Var5", "Var10", "Var2","Var4", "Var7"),
+  #                      # block 2
+  #                      # not used
+  #                      # block 3
+  #                      c("Var46", "Var44", "Var49"),
+  #                      c("Var43", "Var47", "Var45", "Var48", "Var50"))
+  # 
+  # # first / top cluster of every block
+  # res <- run_hierarchy(x = list(x1, x2, x3), y = list(y1, y2, y3), clvar = clvar,
+  #                      dendr = dendr, test.func = test.func.1, # dummy test funct.
+  #                      compMOD.same = compMOD_changing, # it only returns NULL
+  #                      compMOD.changing = compMOD_changing,
+  #                      arg.all.fix = list(pval = pval,
+  #                                         sig = cluster_test[c(1:4)]),
+  #                      hier.adj = FALSE,
+  #                      mt.adj = "SBH")
+  # 
+  # fc.tippett <- function(x) 1 - (1 - min(x))^(3)
+  # 
+  # expect_identical(res$p.value, c(fc.tippett(pval / (32 / 50)),
+  #                                 fc.tippett(pval / (10 / 50)),
+  #                                 fc.tippett(pval / (8 / 50))))
+  # expect_identical(res$block, as.character(c(2, 1, 3)))
+  # 
+  # # first / top cluster of frist block only
+  # res <- run_hierarchy(x = list(x1, x2, x3), y = list(y1, y2, y3), clvar = clvar,
+  #                      dendr = dendr, test.func = test.func.1, # dummy test funct.
+  #                      compMOD.same = compMOD_changing, # it only returns NULL
+  #                      compMOD.changing = compMOD_changing,
+  #                      arg.all.fix = list(pval = pval,
+  #                                         sig = cluster_test[c(1:2)]),
+  #                      hier.adj = FALSE,
+  #                      mt.adj = "SBH")
+  # 
+  # expect_identical(res$p.value, c(fc.tippett(pval/ (10 / 50)), NA, NA))
+  # expect_identical(res$block, as.character(c(1, 2, 3)))
+  # 
+  # # one cluster on the second level of the first block only (3rd level in entire tree)
+  # res <- run_hierarchy(x = list(x1, x2, x3), y = list(y1, y2, y3), clvar = clvar,
+  #                      dendr = dendr, test.func = test.func.1, # dummy test funct.
+  #                      compMOD.same = compMOD_changing, # it only returns NULL
+  #                      compMOD.changing = compMOD_changing,
+  #                      arg.all.fix = list(pval = pval,
+  #                                         sig = cluster_test[c(1:2, 6)]),
+  #                      hier.adj = FALSE,
+  #                      mt.adj = "SBH")
+  # 
+  # expect_identical(res$p.value, c(fc.tippett(pval/ (7 / 10)), NA, NA))
+  # expect_identical(res$block, as.character(c(1, 2, 3)))
+  # 
+  # # two cluster on the second level of the first and thrid block only (3rd level in entire tree)
+  # res <- run_hierarchy(x = list(x1, x2, x3), y = list(y1, y2, y3), clvar = clvar,
+  #                      dendr = dendr, test.func = test.func.1, # dummy test funct.
+  #                      compMOD.same = compMOD_changing, # it only returns NULL
+  #                      compMOD.changing = compMOD_changing,
+  #                      arg.all.fix = list(pval = pval,
+  #                                         sig = cluster_test[c(1:2, 4, 6, 8)]),
+  #                      hier.adj = FALSE,
+  #                      mt.adj = "SBH")
+  # 
+  # # devided by ... / 18 because the second block could not be shown to be significant and
+  # # therefore its part is inherited
+  # expect_identical(res$p.value, c(fc.tippett(pval/ (10 / 18 * 7 / 10)), fc.tippett(pval/ (8 / 18 * 5 / 8)), NA))
+  # expect_identical(res$block, as.character(c(1, 3, 2)))
+  # ## End: Commented on November 3rd
 
 })
 

@@ -21,9 +21,8 @@
 #' increase when going down some given branch. Strong FWER control holds as 
 #' well if the argument is set to FALSE which is the default option. 
 #' @param mt.adj type of multiple testing correction to be used; 
-#' either \code{"SBH"} (Sparse Branch Hierarchical multiple adjustment), 
-#' \code{"dpBF"} (depth-wise Bonferroni multiple adjustment), or \code{"none"}
-#' (no adjusment). See the 'Details' section.
+#' either \code{"dpBF"} (depth-wise Bonferroni multiple adjustment) or \code{"none"}
+#' (no adjustment). See the 'Details' section.
 #' @param agg.method a character string naming an aggregation method which
 #' aggregates the p-values over the different data sets for a given cluster;
 #' either \code{"Tippett"} (Tippett's rule) or \code{"Stouffer"}
@@ -61,14 +60,11 @@
 #' and obviously those covariates are not tested in the hierarchical procedure. 
 #'
 #' The user can specify which hierarchical multiple testing adjustment for the 
-#' hierarchical procedure is applied. The default is \code{mt.adj = "SBH"} 
-#' (Sparse Branch Hierarchical multiple adjustment), which is an improvement 
-#' over so-called depth-wise Bonferroni with respect to power. 
-#' Alternatively, the user can choose \code{"dpBF"} (depth-wise Bonferroni multiple 
-#' adjustment) or \code{"none"} (no adjustment). The hierarchical multiple testing
-#' adjustments \code{"SBH"} and \code{"dpBF"} guarantee strong family-wise error 
-#' control if the group test, which is applied for testing a given group, 
-#' controls the type I error. 
+#' hierarchical procedure is applied. The default is \code{"dpBF"} (depth-wise 
+#' Bonferroni multiple adjustment). Alternatively, the user can choose \code{"none"} 
+#' (no adjustment). The hierarchical multiple testing adjustment \code{"dpBF"} 
+#' guarantees strong family-wise error control if the group test, which is applied 
+#' for testing a given group, controls the type I error. 
 #'
 #' If the argument \code{block} was supplied for the building
 #' of the hierarchical tree (i.e. in the function call of either
@@ -163,8 +159,12 @@
 #'   sign.clusters2[[1, "significant.cluster"]]
 #' }
 #'
-#' @references Renaux, C., Bühlmann, P. (2021), Efficient Multiple Testing 
-#' Adjustment for Hierarchical Inference. <arXiv:2104.15028>
+#' @references 
+#' Meinshausen, N. (2008). Hierarchical testing of variable importance. 
+#' Biometrika, 95(2), 265-278.
+#' Renaux, C., Buzdugan, L., Kalisch, M., and Bühlmann, P. (2020). Hierarchical inference for 
+#' genome-wide association studies: a view on methodology with software. 
+#' Computational Statistics, 35(1), 1-40.
 #'
 #' @name advance_hierarchy
 #' @export
@@ -176,7 +176,7 @@ advance_hierarchy <- function(x, y, dendr,
                               alpha = 0.05, global.test = TRUE,
                               
                               hier.adj = FALSE,
-                              mt.adj = c("SBH", "dpBF", "none"),
+                              mt.adj = c("dpBF", "none"), # "SBH" 
                               agg.method = c("Tippett", "Stouffer"),
                               
                               verbose = FALSE, sort.parallel = TRUE,
@@ -272,3 +272,20 @@ advance_hierarchy <- function(x, y, dendr,
   
 } # {advance_hierarchy}
 
+
+## TMP Parts of the help file which have been changed.
+#
+# @param mt.adj type of multiple testing correction to be used; 
+# either \code{"SBH"} (Sparse Branch Hierarchical multiple adjustment), 
+# \code{"dpBF"} (depth-wise Bonferroni multiple adjustment), or \code{"none"}
+# (no adjusment). See the 'Details' section.
+#
+# The user can specify which hierarchical multiple testing adjustment for the 
+# hierarchical procedure is applied. The default is \code{mt.adj = "SBH"} 
+# (Sparse Branch Hierarchical multiple adjustment), which is an improvement 
+# over so-called depth-wise Bonferroni with respect to power. 
+# Alternatively, the user can choose \code{"dpBF"} (depth-wise Bonferroni multiple 
+# adjustment) or \code{"none"} (no adjustment). The hierarchical multiple testing
+# adjustments \code{"SBH"} and \code{"dpBF"} guarantee strong family-wise error 
+# control if the group test, which is applied for testing a given group, 
+# controls the type I error. 

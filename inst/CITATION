@@ -1,16 +1,40 @@
 bibentry(bibtype = "Article",
-  title        = "Efficient Multiple Testing Adjustment for Hierarchical Inference",
+  title        = "Hierarchical inference for genome-wide association studies: a view on methodology with software",
   author       = c(person(given = "Claude",
                           family = "Renaux"),
+                   person(given = "Laura",
+                          family = "Buzdugan"), 
+                   person(given = "Markus", 
+                          family = "Kalisch"),
                    person(given = "Peter",
                           family = "B\\\"uhlmann")),
-  journal      = "arXiv preprint arXiv:2104.15028",
-  year         = "2021",
+  journal      = "Computational Statistics",
+  year         = "2020",
+  volume       = 35,
+  number       = 1,
+  pages        = "1-40", 
 
   header       = "To cite hierbase in publications use:",
   textVersion  =
-  paste("Claude Renaux and Peter Bühlmann (2021).",
-        "Efficient Multiple Testing Adjustment for Hierarchical Inference.",
-        "arXiv preprint arXiv:2104.15028.")
+  paste("Renaux, Claude, Laura Buzdugan, Markus Kalisch, and Peter Bühlmann.",
+        "Hierarchical inference for genome-wide association studies: a view on methodology with software.", 
+        "Computational Statistics 35, no. 1 (2020): 1-40.")
 )
+
+bibentry(bibtype = "Article",
+  title        = "Hierarchical testing of variable importance",
+  author       = c(person(given = "Nicolai",
+                          family = "Meinshausen")),
+  journal      = "Biometrika",
+  year         = "2008",
+  volume       = 95,
+  number       = 2,
+  pages        = "265-278", 
+
+  textVersion  =
+  paste("Meinshausen, Nicolai.", 
+        "Hierarchical testing of variable importance.", 
+        "Biometrika 95, no. 2 (2008): 265-278.")
+)
+
 

@@ -56,11 +56,14 @@ ETH Z\"urich}
 
 \maketitle
 
-\noindent \textbf{This vignette is in parts based on the pre-print \cite{renaux21}.}
+% \noindent \textbf{This vignette is in parts based on the pre-print \cite{renaux21}.}
 
 \section{Cite \texttt{hierbase}}
-If you use the \texttt{hierbase} package, please cite the paper Renaux, C., and B\"uhlmann, P. (2021). Efficient Multiple Testing Adjustment for Hierarchical Inference.
-\textit{arXiv preprint arXiv:2104.15028}.
+If you use the \texttt{hierbase} package, please cite the papers Meinshausen, N. (2008). 
+Hierarchical testing of variable importance. \textit{Biometrika}, 95(2), 265-278
+and Renaux, C., Buzdugan, L., Kalisch, M., and Bühlmann, P. (2020). Hierarchical 
+inference for genome-wide association studies: a view on methodology with software. 
+\textit{Computational Statistics}, 35(1), 1-40.
 
 \section{Introduction}
 A major goal in high-dimensional statistics is to assign statistical
@@ -71,8 +74,9 @@ assumptions on the well-posedness
   of the design matrix of the covariates in high dimensions.  
 Instead, we advocate 
 to use hierarchical inference, as proposed earlier with
-the same motivation by \cite{Meins08} and further refined by subsequent
-work. It is a data-driven multiple testing approach to find significant groups
+the same motivation by \cite{Meins08} and further extended to simultaneously 
+analyse multiple data sets by \cite{renaux2020}. 
+It is a data-driven multiple testing approach to find significant groups
 or possibly singletons of covariates. The advantage is that groups of
 covariates are typically much easier to identify and if the signal is
 sufficiently strong relative to the correlation structure, our method is
@@ -87,22 +91,23 @@ hierarchical tree, a multiple testing adjustment has to be applied.
 \cite{Meins08} first proposed a hierarchical multiple testing
 adjustment, which we call depth-wise Bonferroni: it (essentially) performs
 Bonferroni adjustment with respect to multiplicity of the number of tests
-at each depth of the hierarchical tree. Depth-wise Bonferroni has been
-improved by so-called inheritance multiple testing rules
-\citep{goeman2010,goeman2012}. Our new proposal is also based on an
-inheritance rule but exploits inheritance more sparsely along the branches of the
-hierarchical tree than the methods by \cite{goeman2010,goeman2012}: we call
-our method Sparse-Branches Hierarchical (SBH) inheritance rule.
+at each depth of the hierarchical tree. 
+% Depth-wise Bonferroni has been
+% improved by so-called inheritance multiple testing rules
+% \citep{goeman2010,goeman2012}. Our new proposal is also based on an
+% inheritance rule but exploits inheritance more sparsely along the branches of the
+% hierarchical tree than the methods by \cite{goeman2010,goeman2012}: we call
+% our method Sparse-Branches Hierarchical (SBH) inheritance rule.
 
-For further details, we refer to our paper \cite{renaux21}, where we
-prove that strong control of the familywise error rate holds for our new SBH
-inheritance rule and that it is an improvement over the depth-wise
-Bonferroni method. We also reason that our SBH inheritance rule
-has higher power for many relevant and practical examples than some other
-inheritance methods, which all improve upon the depth-wise Bonferroni
-approach as well, namely the ones from \cite{goeman2010} and
-\cite{goeman2012}, and the related procedure, tailored for multi
-  sample-splitting tests, from \cite{manpb16b}. 
+% For further details, we refer to our paper \cite{renaux21}, where we
+% prove that strong control of the familywise error rate holds for our new SBH
+% inheritance rule and that it is an improvement over the depth-wise
+% Bonferroni method. We also reason that our SBH inheritance rule
+% has higher power for many relevant and practical examples than some other
+% inheritance methods, which all improve upon the depth-wise Bonferroni
+% approach as well, namely the ones from \cite{goeman2010} and
+% \cite{goeman2012}, and the related procedure, tailored for multi
+%   sample-splitting tests, from \cite{manpb16b}. 
 
 
 \section{Hierarchical Cluster Tree}
@@ -130,8 +135,9 @@ to use the same structure when calling the hierarchical procedure.
 
 
 \section{Toy example for the function \texttt{advance\texttt{\char`_}hierarchy}}
-Our \textsf{R} package \texttt{hierbase} implements our SBH inheritance rule as well 
-as depth-wise Bonferroni. We demonstrate the function 
+Our \textsf{R} package \texttt{hierbase} implements 
+% our SBH inheritance rule as well as 
+depth-wise Bonferroni. We demonstrate the function 
 \texttt{advance\texttt{\char`_}hierarchy} in a toy example. 
 The following arguments of the function are specified: 
 \texttt{x} the data matrix, \texttt{y} 
@@ -174,7 +180,9 @@ See Section \ref{sec.par} for an example how one can define the second level
 of the hierarchical tree and run the code in parallel. 
 
 Note that the printed lines starting with ``step is ...'' are printed by the 
-test function \texttt{QF} used in this example from the \textsf{R} package \texttt{SIHR}. 
+test function \texttt{QF} used in this example from the \textsf{R} package 
+\texttt{SIHR}. The methodology and theory for the test function \texttt{QF} 
+can be found in \cite{guo2019}.
 
 
 \section{Toy example for the function \texttt{run\texttt{\char`_}hierarchy}}

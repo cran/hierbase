@@ -19,6 +19,9 @@ require the hierarchical tree as an input.
 }
 
 \references{
-Renaux, C., Bühlmann, P. (2021), Efficient Multiple Testing 
-Adjustment for Hierarchical Inference. <arXiv:2104.15028>
+Meinshausen, N. (2008). Hierarchical testing of variable importance. 
+Biometrika, 95(2), 265-278.
+Renaux, C., Buzdugan, L., Kalisch, M., and Bühlmann, P. (2020). Hierarchical inference for 
+genome-wide association studies: a view on methodology with software. 
+Computational Statistics, 35(1), 1-40.
 }
