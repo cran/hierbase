@@ -1,7 +1,7 @@
 Package: hierbase
 Type: Package
 Title: Enabling Hierarchical Multiple Testing
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(person("Claude", "Renaux", role = c("aut", "cre"), 
                     email = "renaux@stat.math.ethz.ch"), 
              person("Peter", "Bühlmann", role = c("ths")))
@@ -29,9 +29,9 @@ Suggests: knitr, MASS, testthat
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1
 NeedsCompilation: no
-Packaged: 2021-11-03 13:19:37 UTC; renauxc
+Packaged: 2021-11-08 10:32:19 UTC; renauxc
 Author: Claude Renaux [aut, cre],
   Peter Bühlmann [ths]
 Maintainer: Claude Renaux <renaux@stat.math.ethz.ch>
 Repository: CRAN
-Date/Publication: 2021-11-04 00:30:02 UTC
+Date/Publication: 2021-11-08 12:00:02 UTC

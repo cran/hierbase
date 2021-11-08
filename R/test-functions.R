@@ -187,8 +187,6 @@ compMOD.same.QF <- function(x, y, clvar, arg.all, arg.all.fix) {
 test.func.QF <- function(x, y, clvar, arg.all, colnames.cluster,
                          arg.all.fix, mod.large, mod.small){
 
-  # browser()
-  
   Cov.weight <- arg.all.fix$Cov.weight
   A <- arg.all.fix$A
   # previous version of SIHR: intercept <- arg.all.fix$intercept
@@ -208,8 +206,6 @@ test.func.QF <- function(x, y, clvar, arg.all, colnames.cluster,
   # Note that the intercept is not included in the test set.
   # For covariates X1, X2, ... Xp, the corresponding index would be 1,2, ... p
   ind.test.set <- which(colnames(x) %in% colnames.cluster)
-  
-  browser()
   
   Est <- SIHR::QF(X = cbind(x, clvar), y = y,
                   G = ind.test.set,

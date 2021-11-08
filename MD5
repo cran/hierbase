@@ -1,4 +1,4 @@
-c6f8d562cd695b3199d1d554abf1b0eb *DESCRIPTION
+cca034d68b791597cf53ac11277aeef5 *DESCRIPTION
 92182461def3ee13e8dd5f2c4945782e *NAMESPACE
 a7eca9813d320d14366cdf420a6d2b6b *NEWS.md
 051bf95551c154629d927e54622247f4 *R/advance_hierarchy.R
@@ -11,14 +11,14 @@ cfd393c8d3e2bfeba60315e794fbb000 *R/comp-LMobj-large.R
 6d03adb536b1d2abe4d13d9cea22c4d3 *R/iterative-testing.R
 5d0ff1e210994356d0145fa8c2b6e719 *R/print.R
 5b210d01424b57acf793267fb5f04154 *R/run-hierarchy.R
-b903f1f163efead91bcb86be9ae03b11 *R/test-functions.R
+d373a5a784912033e8ae2d1d043a0abf *R/test-functions.R
 181c70163a71e9de376f992b397689fc *R/tryCatch-W-E.R
 3f0fd977b278ece5f5beb188795d6757 *README.md
 25213a53a4ec2787a65dbe3aea3328f6 *build/vignette.rds
 c32db374dec3f6430f376ae75657eeef *inst/CITATION
 7610bf055c2e533d212c0870f83cf369 *inst/doc/vignette-hierbase.R
 4bec41b2f4171874d72a23d13352cd53 *inst/doc/vignette-hierbase.Rnw
-518d0bcab98aa6c7f8b8b26b1f238940 *inst/doc/vignette-hierbase.pdf
+7ff7875777902d2b7765cc4f6dbe75de *inst/doc/vignette-hierbase.pdf
 6eca3ddf0b9852c2ca8c5d2299492b28 *man/advance_hierarchy.Rd
 9e3aa83cde1672791a349dcda8a9db99 *man/cluster_positions.Rd
 67f764df4f907a9b8bc94f5db154fc24 *man/cluster_vars.Rd
